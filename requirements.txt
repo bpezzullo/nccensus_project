@@ -1,0 +1,13 @@
+flask 
+flask_pymongo 
+flask_cors 
+requests
+json
+pymongo 
+gridfs 
+bson 
+census 
+csv 
+pandas
+numpy
+time

@@ -1,0 +1,15 @@
+open the files 2012nccensus and 2013 nccensus from the firstory datasets in visual studio code and 
+hightlight all the data in the file.
+
+go to mongo DB under the nccensus collection and click on 'add data'
+
+in the drop down click on 'insert document'.
+
+another pop-up will display.  paste the data from the file into the pop-up and click 'insert'
+
+repeat for the other file.  
+
+This will need to be repeated for the census collection also
+
+Those files are 2012census and 2013census in the same directory datasets.
+
