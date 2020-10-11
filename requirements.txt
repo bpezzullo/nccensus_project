@@ -4,7 +4,6 @@ flask_cors
 requests
 bson 
 census 
-csv 
 pandas
 numpy
 time
