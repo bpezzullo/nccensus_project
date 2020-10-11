@@ -92,7 +92,7 @@ function empNCbar(year) {
     var eind = 1 // emp index
     var nind = 2 // naics-code index
 
-    url = "http://127.0.0.1:5000/get_nc_data/" + year;
+    url = "/get_nc_data/" + year;
 
     d3.json(url, function(data) {
 
@@ -134,7 +134,7 @@ function empNCbar(year) {
 */
 function empNCtimeline(year) {
 
-    url = "http://127.0.0.1:5000/get_nc_total/" + year;
+    url = "/get_nc_total/" + year;
 
     d3.json(url, function(data){
         values = data.size;
@@ -161,7 +161,7 @@ function empNCtimeline(year) {
         myLineChart.update();
 
         // Updating chart with new data - population data
-        pop_url = "http://127.0.0.1:5000/get_population/" + year + "/STATE"
+        pop_url = "/get_population/" + year + "/STATE"
         d3.json(pop_url, function(population){
 
             // Default is population data 'on'
@@ -215,7 +215,7 @@ function countyCharts(year, county, census) {
 
     console.log("in countyCharts", year)
 
-    d3.json("http://127.0.0.1:5000/get_combined_codes", function(codes){
+    d3.json("/get_combined_codes", function(codes){
         //console.log(codes,county)
         // Get the county number for census and adjust the length of string
         var countyNbr = codes[county].Census_NBR;
@@ -253,7 +253,7 @@ function countyCharts(year, county, census) {
     })
 
     //- Update the line chart
-    var url = "http://127.0.0.1:5000/get_county_data/"+county;
+    var url = "/get_county_data/"+county;
     d3.json(url, function(data) {
 
         while (myLineChart.data.datasets.length > 0) {
@@ -274,7 +274,7 @@ function countyCharts(year, county, census) {
 
 
         // Updating chart with new data - population data
-        pop_url = "http://127.0.0.1:5000/get_population/" + year + "/" + county
+        pop_url = "/get_population/" + year + "/" + county
 
         d3.json(pop_url, function(population){
 

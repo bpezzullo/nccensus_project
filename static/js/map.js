@@ -11,13 +11,13 @@ function init_data() {
 
 
     
-    url = "http://127.0.0.1:5000/reload_geo"
+    url = "/reload_geo"
   // Perform an API call to the get the data into MongoDB
   d3.json(url, function (call_status) {
     console.log('geo' , call_status);
     
 
-      url = "http://127.0.0.1:5000/reload_census"
+      url = "/reload_census"
       // Perform an API call to the get the data into MongoDB
       d3.json(url, function (call_status) {
         console.log('census',call_status);
@@ -26,12 +26,12 @@ function init_data() {
         // }
 
 
-        url = "http://127.0.0.1:5000/reload_nccensus"
+        url = "/reload_nccensus"
         // Perform an API call to the get the data into MongoDB
         d3.json(url, function (call_status) {
           console.log("nc", call_status);
 
-          url = "http://127.0.0.1:5000/get_years"
+          url = "/get_years"
           // Perform an API call to the get the years stored from MongoDB
           d3.json(url, function (data) {
             console.log('years', data)
@@ -309,17 +309,17 @@ function buildMap(year) {
   //empNCtimeline(year);
 
   // Use this link to get the geojson data.
-  var link = "http://127.0.0.1:5000/get_geo"
+  var link = "/get_geo"
 
   // Grabbing our GeoJSON data..
   d3.json(link, function (data) {
 
-    url = "http://127.0.0.1:5000/get_census/" + year
+    url = "/get_census/" + year
     // Perform an API call to get the census daa for the year idnetified
 
     d3.json(url, function (county_data) {
 
-      url = "http://127.0.0.1:5000/get_pop/" + year
+      url = "/get_pop/" + year
       // Perform an API call to get the census daa for the year idnetified
   
       d3.json(url, function (pop_data) {
