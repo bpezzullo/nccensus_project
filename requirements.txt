@@ -2,8 +2,6 @@ flask
 flask_pymongo 
 flask_cors 
 requests
-json
-pymongo 
 gridfs 
 bson 
 census 
