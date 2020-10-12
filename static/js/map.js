@@ -51,7 +51,7 @@ function init_data() {
 
 //init_data();
 
-init_data();
+// init_data();
 
 /* Name: fill_in_popup.  
   Description: This populates the pop-up when the county is selected 
