@@ -8,6 +8,7 @@ from gridfs import GridFS
 from bson import objectid, json_util, BSON
 import census as ce
 import csv 
+import config.py
 
 
 
@@ -33,15 +34,16 @@ app.config['CORS_ORIGINS'] = '*'
 # temporary mongo DB
 #app.config["MONGO_URI"] = "mongodb://localhost:27017/censusdb"
 
-app.config['Mongo_URI'] = 'mongodb+srv:'
+app.config['MONGO_URI'] = 'mongodb+srv://' + username + ':' + password + '@cluster0.jvrf7.mongodb.net/' + dbname + '?retryWrites=true&w=majority'
 
+print(app.config['MONGO_URI'])
 # run in debug mode
 app.debug = True
 
 mongo = PyMongo(app)
 
-db = MongoClient().mygrid 
-fs = GridFS(db)
+# db = MongoClient().mygrid 
+# fs = GridFS(db)
 
 #   Name: deter_county  
 #   Description: This populates the pop-up when the county is selected 
