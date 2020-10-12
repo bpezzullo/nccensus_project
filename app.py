@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, Response, jsonify
+from flask import Flask, render_template, Response, jsonify
 from flask_pymongo import PyMongo
 from flask_cors import CORS, cross_origin
 import requests
@@ -8,7 +8,8 @@ from gridfs import GridFS
 from bson import objectid, json_util, BSON
 import census as ce
 import csv 
-
+# from flask_pymongo import PyMongo
+# from flask_cors import CORS, cross_origin
 
 #----- Import API key ---------------
 from config import username, password, dbname
@@ -39,7 +40,6 @@ app.config['CORS_ORIGINS'] = '*'
 
 app.config['MONGO_URI'] = 'mongodb+srv://' + username + ':' + password + '@cluster0.jvrf7.mongodb.net/' + dbname + '?retryWrites=true&w=majority'
 
-print(app.config['MONGO_URI'])
 # run in debug mode
 app.debug = True
 
@@ -162,7 +162,7 @@ def reload_census():
                 result = 'error'                
             else:
                 censusyear = {"year": year, "result" : responseJson}
-                censuscol.insert(censusyear)
+                censuscol.insert_one(censusyear)
                 years_nc.append(year)
                 result = "new"
 
@@ -194,7 +194,7 @@ def reload_nccensus():
                 result = 'error'
             else:    
                 censusyear = {"year": year, "result" : responseJson}
-                censuscol.insert(censusyear)
+                censuscol.insert_one(censusyear)
                 years_pop.append(year)
                 result = "new"
         else:  # don't refresh if we have the data.  Eventually we would want to change this
