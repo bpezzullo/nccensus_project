@@ -11,41 +11,40 @@ function init_data() {
 
 
     
-    url = local + "/reload_geo"
+    url = local + "/reload_geo";
   // Perform an API call to the get the data into MongoDB
   d3.json(url, function (call_status) {
-    console.log('geo' , call_status);
+      console.log('geo' , call_status);
+    
 
-  });
-      url = local + "/reload_census"
+      url = local + "/reload_census";
       // Perform an API call to the get the data into MongoDB
-      d3.json(url, function(cen_data) {
+      d3.json(url).then(function(cen_data) {
         console.log('census',cen_data);
         // while (call_status == null) {
         //   console.log("loop")
         // }
 
 
-        url = local + "/reload_nccensus"
+        url = local + "/reload_nccensus";
         // Perform an API call to the get the data into MongoDB
-        d3.json(url, function (nc_data) {
+        d3.json(url).then(function (nc_data) {
           console.log("nc", nc_data);
 
           url = local + "/get_years"
           // Perform an API call to the get the years stored from MongoDB
-          d3.json(url, function (data) {
+          d3.json(url).then(function (data) {
             console.log('years', data)
             //Create the drop down list of subject IDs
             document.getElementById("selDataset").innerHTML = generatetxt(data);
-            var init_year = parseInt(data[4]);
-            console.log(init_year);
+            var init_year = parseInt(data[0]);
             buildMap(init_year);
             empNCbar(init_year);
             empNCtimeline(init_year);
           });
+        });
       });
-    });
-
+  });
 
   return;
 }
@@ -315,12 +314,12 @@ function buildMap(year) {
   // Grabbing our GeoJSON data..
   d3.json(link, function (data) {
 
-    url = local + "/get_census/" + year
+    url = local + "/get_census" + year
     // Perform an API call to get the census daa for the year idnetified
 
     d3.json(url, function (county_data) {
 
-      url = local + "/get_pop/" + year
+      url = local + "/get_pop" + year
       // Perform an API call to get the census daa for the year idnetified
   
       d3.json(url, function (pop_data) {

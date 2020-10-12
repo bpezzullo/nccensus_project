@@ -23,7 +23,7 @@ recent_years_wanted= ['2012','2013','2014','2015','2016','2017','2018']
 
 years_nc = []
 years_pop = []
-recent_years = []
+# recent_years = []
 
 app = Flask(__name__, static_url_path='', static_folder='static')
 CORS(app, resources={
@@ -91,6 +91,14 @@ def deter_county(result,county,year):
             break
 
     return size
+
+
+
+def m_insert(name,data):
+    geocol = mongo.db.geo
+    dataset = {"type": name, "result" : data}
+    geocol.insert(dataset)
+    return
       
         
 #This is not recommended in production
@@ -102,42 +110,74 @@ def root():
     return app.send_static_file("index.html")
 
 
-# # get the GEOJSON information from mongodb
-# @app.route("/get_geo", methods=["GET"])
-# def get_geo():
+# get the GEOJSON information from mongodb
+@app.route("/get_geo", methods=["GET"])
+@cross_origin()
+def get_geo():
 
-#     #to acces the data first we need to get the colletion in where the files are stored
-#     col = db.fs.files.find_one()
+    # access the geo collection
+    geocol = mongo.db.geo
 
-#     if col == None:
-#         print("GeoJSON is still loading please wait and reselect year")
-#         data = {}
-#     else:
-#     # once we have the object storing the file information, we can get the data and read it
-#         bsdata = fs.get(col["_id"]).read()
+    myquery = { "type": "counties" }
 
-#         # since the data was encode, we need to decode it back
-#         data = BSON.decode(bsdata)
+    #Are the documents there?
+    x = geocol.count_documents(myquery)
+    data = {}
+    if x == 0:
+        print("GeoJSON is still loading please wait and reselect year")
 
-#     return jsonify(data)
+    else:
+        geodoc = geocol.find_one(myquery)
+        # print(geodoc)
+        geocounty = json.loads(json_util.dumps(geodoc))
+        counties = geocounty['result']
+        counties_data = []
+        for county in counties:
+            myquery = {"type": county}
+            geodoc = geocol.find_one(myquery)
+#            print(county , geodoc['result'])
+            counties_data.append(geodoc['result'])
+        # print(counties_data)
+        data['crs'] = geocol.find_one({"type":'crs'})['result']
+        data['name'] = geocol.find_one({"type":'name'})['result']
+        data['type'] = geocol.find_one({"type":'type'})['result']
+        data['features'] = counties_data
 
-# # call the API to load the nc geo JSON and store into Mongo DB if not there.
-# @app.route("/reload_geo", methods=["GET"])
-# def reload_geo():
-#     # check to see if there is an exisitng file.  If so than do not reload
-#     col = db.fs.files.find_one()
+    return jsonify(data)
 
-#     if col == None:
-#         # if the geojson file is not stored, call the API.
-#         response = requests.get("https://opendata.arcgis.com/datasets/d192da4d0ac249fa9584109b1d626286_0.geojson")
+# call the API to load the nc geo JSON and store into Mongo DB if not there.
+@app.route("/reload_geo", methods=["GET"])
+@cross_origin()
+def reload_geo():
+    # access the geo collection
+    geocol = mongo.db.geo
 
-#         # GridFS stored BSON binary files, the fucntion to do that is BSON.encode
-#         geojson = BSON.encode(response.json())
+    myquery = { "type": "counties" }
 
-#         # then we store it with the put()
-#         fs.put(geojson)
+    #Are the documents there?
+    x = geocol.count_documents(myquery)
 
-#     return get_geo()
+    if x == 0:
+        # if col == 0:
+        # if the geojson file is not stored, call the API.
+        response = requests.get("https://opendata.arcgis.com/datasets/d192da4d0ac249fa9584109b1d626286_0.geojson")
+
+            # # GridFS stored BSON binary files, the fucntion to do that is BSON.encode
+            # geojson = BSON.encode(response.json())
+        result = response.json()
+
+        m_insert('crs',result['crs'])
+        m_insert('name',result['name'])
+        m_insert('type',result['type'])
+
+        counties = []
+        for coord in result['features']:
+            counties.append(coord['properties']['CountyName'])
+            m_insert(coord['properties']['CountyName'],coord)
+
+        m_insert('counties',counties)
+
+    return get_geo()
 
 # call the API to load the nc employment and store into Mongo DB if not there.
 @app.route("/reload_census", methods=["GET"])
@@ -147,7 +187,9 @@ def reload_census():
     # access the census collection
     censuscol = mongo.db.census
 
+    global years_nc
     years_nc = []
+
     # loop through the years to pull the information in.
     for year in years_wanted:
         myquery = { "year": year }
@@ -169,8 +211,9 @@ def reload_census():
         else:  # don't refresh if we have the data.  Eventually we would want to change this
             result = "existing"
             years_nc.append(year)
-    print(years_nc)
-    return result
+    final_year = years_nc[-1]
+    return get_nc_data(final_year)
+
 
 # call the API to load the nc population and store into Mongo DB if not there.
 @app.route("/reload_nccensus", methods=["GET"])
@@ -179,8 +222,9 @@ def reload_nccensus():
  
     # access the nccensus collection
     censuscol = mongo.db.nccensus
+    global years_pop 
     years_pop = []
-    # loop through the years to pull the information in.
+        # loop through the years to pull the information in.
     for year in years_wanted:
         myquery = { "year": year }
         x = censuscol.count_documents(myquery)
@@ -200,8 +244,9 @@ def reload_nccensus():
         else:  # don't refresh if we have the data.  Eventually we would want to change this
             result = "existing"
             years_pop.append(year)
-    print(years_pop)
-    return result
+    final_year = years_pop[-1]
+    return get_nc_data(final_year)
+
 
 
 # These routes are used to populate the information from the database or files.

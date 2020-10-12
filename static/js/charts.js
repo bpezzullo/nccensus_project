@@ -22,6 +22,7 @@ const naics_codes = {
     "95": "Auxiliary Establishments",
     "99": "Unclassified" };
 
+local = 'http://127.0.0.1:5000';
 
 /**  Chart styling functions */
 function ncColor(op) {
@@ -92,7 +93,7 @@ function empNCbar(year) {
     var eind = 1 // emp index
     var nind = 2 // naics-code index
 
-    url = "/get_nc_data/" + year;
+    url = local + "/get_nc_data/" + year;
 
     d3.json(url, function(data) {
 
@@ -134,7 +135,7 @@ function empNCbar(year) {
 */
 function empNCtimeline(year) {
 
-    url = "/get_nc_total/" + year;
+    url = local + "/get_nc_total/" + year;
 
     d3.json(url, function(data){
         values = data.size;
@@ -161,7 +162,7 @@ function empNCtimeline(year) {
         myLineChart.update();
 
         // Updating chart with new data - population data
-        pop_url = "/get_population/" + year + "/STATE"
+        pop_url = local + "/get_population/" + year + "/STATE"
         d3.json(pop_url, function(population){
 
             // Default is population data 'on'
@@ -215,7 +216,7 @@ function countyCharts(year, county, census) {
 
     console.log("in countyCharts", year)
 
-    d3.json("/get_combined_codes", function(codes){
+    d3.json(local + "/get_combined_codes", function(codes){
         //console.log(codes,county)
         // Get the county number for census and adjust the length of string
         var countyNbr = codes[county].Census_NBR;
@@ -253,7 +254,7 @@ function countyCharts(year, county, census) {
     })
 
     //- Update the line chart
-    var url = "/get_county_data/"+county;
+    var url = local + "/get_county_data/"+county;
     d3.json(url, function(data) {
 
         while (myLineChart.data.datasets.length > 0) {
@@ -274,7 +275,7 @@ function countyCharts(year, county, census) {
 
 
         // Updating chart with new data - population data
-        pop_url = "/get_population/" + year + "/" + county
+        pop_url = local + "/get_population/" + year + "/" + county
 
         d3.json(pop_url, function(population){
 
