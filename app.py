@@ -8,7 +8,10 @@ from gridfs import GridFS
 from bson import objectid, json_util, BSON
 import census as ce
 import csv 
-import config.py
+
+
+#----- Import API key ---------------
+from config import username, password, dbname
 
 
 
@@ -93,48 +96,48 @@ def deter_county(result,county,year):
 #This is not recommended in production
 #What would happen is every time you visit the root route it would load the DB again with all the data
 
-@app_route("/",methods=['GET','POST'])
+@app.route("/",methods=['GET','POST'])
 def root():
     # return render_template('index.html')
     return app.send_static_file("index.html")
 
 
-# get the GEOJSON information from mongodb
-@app.route("/get_geo", methods=["GET"])
-def get_geo():
+# # get the GEOJSON information from mongodb
+# @app.route("/get_geo", methods=["GET"])
+# def get_geo():
 
-    #to acces the data first we need to get the colletion in where the files are stored
-    col = db.fs.files.find_one()
+#     #to acces the data first we need to get the colletion in where the files are stored
+#     col = db.fs.files.find_one()
 
-    if col == None:
-        print("GeoJSON is still loading please wait and reselect year")
-        data = {}
-    else:
-    # once we have the object storing the file information, we can get the data and read it
-        bsdata = fs.get(col["_id"]).read()
+#     if col == None:
+#         print("GeoJSON is still loading please wait and reselect year")
+#         data = {}
+#     else:
+#     # once we have the object storing the file information, we can get the data and read it
+#         bsdata = fs.get(col["_id"]).read()
 
-        # since the data was encode, we need to decode it back
-        data = BSON.decode(bsdata)
+#         # since the data was encode, we need to decode it back
+#         data = BSON.decode(bsdata)
 
-    return jsonify(data)
+#     return jsonify(data)
 
-# call the API to load the nc geo JSON and store into Mongo DB if not there.
-@app.route("/reload_geo", methods=["GET"])
-def reload_geo():
-    # check to see if there is an exisitng file.  If so than do not reload
-    col = db.fs.files.find_one()
+# # call the API to load the nc geo JSON and store into Mongo DB if not there.
+# @app.route("/reload_geo", methods=["GET"])
+# def reload_geo():
+#     # check to see if there is an exisitng file.  If so than do not reload
+#     col = db.fs.files.find_one()
 
-    if col == None:
-        # if the geojson file is not stored, call the API.
-        response = requests.get("https://opendata.arcgis.com/datasets/d192da4d0ac249fa9584109b1d626286_0.geojson")
+#     if col == None:
+#         # if the geojson file is not stored, call the API.
+#         response = requests.get("https://opendata.arcgis.com/datasets/d192da4d0ac249fa9584109b1d626286_0.geojson")
 
-        # GridFS stored BSON binary files, the fucntion to do that is BSON.encode
-        geojson = BSON.encode(response.json())
+#         # GridFS stored BSON binary files, the fucntion to do that is BSON.encode
+#         geojson = BSON.encode(response.json())
 
-        # then we store it with the put()
-        fs.put(geojson)
+#         # then we store it with the put()
+#         fs.put(geojson)
 
-    return get_geo()
+#     return get_geo()
 
 # call the API to load the nc employment and store into Mongo DB if not there.
 @app.route("/reload_census", methods=["GET"])
