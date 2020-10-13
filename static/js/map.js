@@ -1,5 +1,5 @@
-local = '';    // for running with Heroku
-// local = 'http://127.0.0.1:5000';           // for running with Flask local
+console.log(local);
+
 console.log("map.js");
 /* function to generate initial pull of the data to be stored in Mongodb.   
   Input:
@@ -39,8 +39,9 @@ function init_data() {
             console.log('years', data)
             //Create the drop down list of subject IDs
             document.getElementById("selDataset").innerHTML = generatetxt(data);
-            var init_year = parseInt(data[4]);
+            var init_year = parseInt(data[0]);
             console.log(init_year);
+            cursor_wait();
             buildMap(init_year);
             empNCbar(init_year);
             empNCtimeline(init_year);
@@ -87,6 +88,7 @@ function fill_in_popup(name, numb, pop, county_d) {
     none
 */
 function optionChanged(value) {
+  cursor_wait();
   buildMap(value);
   empNCbar(value);
   empNCtimeline(value);
@@ -371,6 +373,7 @@ function buildMap(year) {
           layer.bindPopup(fill_in_popup(feature.properties.CountyName, feature.properties.CNTY_NBR, pop_data,county_info));
         }
       }).addTo(myMap);
+      cursor_clear();
     });
   });
 });

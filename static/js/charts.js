@@ -24,7 +24,7 @@ const naics_codes = {
 
 console.log("charts.js");
 local = '';    // for running with Heroku
-// local = 'http://127.0.0.1:5000';           // for running with Flask local
+local = 'http://127.0.0.1:5000';           // for running with Flask local
 
 /**  Chart styling functions */
 function ncColor(op) {

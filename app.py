@@ -4,7 +4,6 @@ from flask_pymongo import PyMongo
 from flask_cors import CORS, cross_origin
 import requests
 import json
-# from bson import json_util
 import census as ce
 import csv 
 
@@ -98,7 +97,8 @@ def m_insert(name,data):
       
         
 
-@app.route("/",methods=['GET','POST'])
+@app.route('/', methods=["GET", "POST"])
+@app.route("/home")
 def root():
     # return render_template('index.html')
     return app.send_static_file("index.html")
