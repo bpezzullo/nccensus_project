@@ -1,6 +1,6 @@
 local = '';    // for running with Heroku
 // local = 'http://127.0.0.1:5000';           // for running with Flask local
-
+console.log("map.js");
 /* function to generate initial pull of the data to be stored in Mongodb.   
   Input:
     None
@@ -10,7 +10,7 @@ local = '';    // for running with Heroku
 */
 function init_data() {
 
-
+  console.log("init");
     
     url = local + "/reload_geo"
   // Perform an API call to the get the data into MongoDB
@@ -18,6 +18,7 @@ function init_data() {
     console.log('geo' , call_status);
 
   });
+    console.log("geo called");
       url = local + "/reload_census"
       // Perform an API call to the get the data into MongoDB
       d3.json(url, function(cen_data) {

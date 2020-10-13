@@ -22,6 +22,7 @@ const naics_codes = {
     "95": "Auxiliary Establishments",
     "99": "Unclassified" };
 
+console.log("charts.js");
 local = '';    // for running with Heroku
 // local = 'http://127.0.0.1:5000';           // for running with Flask local
 
