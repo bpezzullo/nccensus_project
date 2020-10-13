@@ -4,7 +4,6 @@ whitenoise
 flask_pymongo
 flask_cors
 requests
-bson
 dnspython
 pandas
 numpy
