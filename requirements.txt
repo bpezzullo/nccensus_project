@@ -6,6 +6,5 @@ flask_cors
 requests
 bson
 dnspython
-census
 pandas
 numpy
