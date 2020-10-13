@@ -1,9 +1,10 @@
 from flask import Flask, render_template, Response, jsonify
+from bson import json_util
 from flask_pymongo import PyMongo
 from flask_cors import CORS, cross_origin
 import requests
 import json
-from bson import json_util
+# from bson import json_util
 import census as ce
 import csv 
 
