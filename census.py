@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import requests
 import json
-import time
+# import time
 
 #----- Import API key ---------------
 from config import census_api_key
