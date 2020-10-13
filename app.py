@@ -3,7 +3,6 @@ from flask_pymongo import PyMongo
 from flask_cors import CORS, cross_origin
 import requests
 import json
-from pymongo import MongoClient
 from bson import json_util
 import census as ce
 import csv 
