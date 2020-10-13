@@ -4,7 +4,7 @@ from flask_cors import CORS, cross_origin
 import requests
 import json
 from pymongo import MongoClient
-from bson import objectid, json_util, BSON
+from bson import json_util
 import census as ce
 import csv 
 # from flask_pymongo import PyMongo
@@ -40,7 +40,7 @@ app.config['CORS_ORIGINS'] = '*'
 app.config['MONGO_URI'] = 'mongodb+srv://' + username + ':' + password + '@cluster0.jvrf7.mongodb.net/' + dbname + '?retryWrites=true&w=majority'
 
 # run in debug mode
-app.debug = True
+#app.debug = True
 
 mongo = PyMongo(app)
 
@@ -100,8 +100,6 @@ def m_insert(name,data):
     return
       
         
-#This is not recommended in production
-#What would happen is every time you visit the root route it would load the DB again with all the data
 
 @app.route("/",methods=['GET','POST'])
 def root():
