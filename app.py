@@ -6,8 +6,7 @@ import json
 from bson import json_util
 import census as ce
 import csv 
-# from flask_pymongo import PyMongo
-# from flask_cors import CORS, cross_origin
+
 
 #----- Import API key ---------------
 from config import username, password, dbname
@@ -21,7 +20,6 @@ recent_years_wanted= ['2012','2013','2014','2015','2016','2017','2018']
 
 years_nc = []
 years_pop = []
-# recent_years = []
 
 app = Flask(__name__, static_url_path='', static_folder='static')
 CORS(app, resources={
@@ -31,6 +29,7 @@ CORS(app, resources={
 })
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['CORS_ORIGINS'] = '*'
+
 # Use flask_pymongo to set up mongo connection
 
 # temporary mongo DB
@@ -43,8 +42,6 @@ app.config['MONGO_URI'] = 'mongodb+srv://' + username + ':' + password + '@clust
 
 mongo = PyMongo(app)
 
-# db = MongoClient().mygrid 
-# fs = GridFS(db)
 
 #   Name: deter_county  
 #   Description: This populates the pop-up when the county is selected 
@@ -134,6 +131,7 @@ def get_geo():
 #            print(county , geodoc['result'])
             counties_data.append(geodoc['result'])
         # print(counties_data)
+        # recreate the geojson file from the mongodb.
         data['crs'] = geocol.find_one({"type":'crs'})['result']
         data['name'] = geocol.find_one({"type":'name'})['result']
         data['type'] = geocol.find_one({"type":'type'})['result']
@@ -158,16 +156,18 @@ def reload_geo():
         # if the geojson file is not stored, call the API.
         response = requests.get("https://opendata.arcgis.com/datasets/d192da4d0ac249fa9584109b1d626286_0.geojson")
 
-            # # GridFS stored BSON binary files, the fucntion to do that is BSON.encode
-            # geojson = BSON.encode(response.json())
+        # need to chunk up the geojson file to allow it to be stored in Mongodb
         result = response.json()
 
+        # call function to insert each type
         m_insert('crs',result['crs'])
         m_insert('name',result['name'])
         m_insert('type',result['type'])
 
+        # for the couties break-up the features portion of the json and store each county separatedly.
         counties = []
         for coord in result['features']:
+            # for each county store the county boarder information.
             counties.append(coord['properties']['CountyName'])
             m_insert(coord['properties']['CountyName'],coord)
 
