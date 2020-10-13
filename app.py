@@ -4,7 +4,6 @@ from flask_cors import CORS, cross_origin
 import requests
 import json
 from pymongo import MongoClient
-from gridfs import GridFS
 from bson import objectid, json_util, BSON
 import census as ce
 import csv 
