@@ -1,4 +1,5 @@
-local = 'http://127.0.0.1:5000';
+local = '';    // for running with Heroku
+// local = 'http://127.0.0.1:5000';           // for running with Flask local
 
 /* function to generate initial pull of the data to be stored in Mongodb.   
   Input:
