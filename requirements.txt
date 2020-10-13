@@ -1,12 +1,12 @@
-flask 
+flask
 gunicorn
 whitenoise
-flask_pymongo 
-flask_cors 
+flask_pymongo
+flask_cors
 requests
-bson 
+bson
 dnspython
-census 
+census
 pandas
 numpy
 time
