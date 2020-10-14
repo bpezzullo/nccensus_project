@@ -87,7 +87,7 @@ function fill_in_popup(name, numb, pop, county_d) {
     pop_html - text string with html encoding for the pop-up
 */
 function waiting(year) {
-  var data = '<h5> Map for year ' + year + ' is loading </h5>'
+  var data = '<h5 class="blink blink-one"> Map for year ' + year + ' is loading </h5>'
   document.getElementById("wait").innerHTML = data;
   return 
 }
