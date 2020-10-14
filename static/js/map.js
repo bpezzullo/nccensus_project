@@ -72,19 +72,36 @@ init_data();
 function fill_in_popup(name, numb, pop, county_d) {
   pop_html = "<h5>" + name + " (" + numb + ") </h5> <hr> <h6>Employment: ";
   var c_emp = determine_size(name, county_d);
-  pop_html = pop_html + c_emp + "</h6> <br> <h6>Total Population: ";
-  pop_html = pop_html + pop[name] + "</h6> <br> <h6>Employment: "
+
+  pop_html = pop_html + commaSeparateNumber(c_emp) + "</h6> <br> <h6>Total Population: ";
+  pop_html = pop_html + commaSeparateNumber(pop[name]) + "</h6> <br> <h6>Employment: "
   var pop_d = (c_emp * 100 / pop[name]).toFixed(2);
   pop_html = pop_html + pop_d + "%</h6>";
   return pop_html;
 }
+
+/* Name: commaSeparateNumber
+  Description:  Adds comma(s) to a number
+  Input:
+    val - number to be updated
+  Returns
+    val - string with commas
+    */
+
+function commaSeparateNumber(val){
+  while (/(\d+)(\d{3})/.test(val.toString())){
+    val = val.toString().replace(/(\d+)(\d{3})/, '$1'+','+'$2');
+  }
+  return val;
+}
+
 /* Name: waiting
-  Description: This populates the pop-up when the county is selected 
+  Description: When the map is loading provide information to keep the user entertained 
   Input:
     year - year
 
   Returns:
-    pop_html - text string with html encoding for the pop-up
+    None
 */
 function waiting(year) {
   var data = '<h5 class="blink blink-one"> Map for year ' + year + ' is loading </h5>'
@@ -93,12 +110,12 @@ function waiting(year) {
 }
 
 /* Name: map_comp
-  Description: This populates the pop-up when the county is selected 
+  Description: Map is completeed loading return display to normal 
   Input:
     year - year
 
   Returns:
-    pop_html - text string with html encoding for the pop-up
+    None
 */
 function map_comp(year) {
   var data = 'Total Emplopyed by County Map in year ' + year
