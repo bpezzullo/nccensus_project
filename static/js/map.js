@@ -276,10 +276,28 @@ function determine_size(county, county_d) {
 function chooseColor(county, county_info) {
   var result;
   var temp;
+  var red = 0;
+  var green = 0;
+  var blue = 255;
+  var mod;
   size = determine_size(county, county_info);
-  temp = 0xFFFFFF - (0xf * parseInt(size / 10));
+  // if (size <= 1000) {
+  //   red = parseInt(size / 392);
+  //   green = red;
+  // }
+  // else {
+  //   if (size >= 600000) {
+  //     blue = 16
+  //   }
+  //   mod = parseInt((size % 10000) / 1000) 
+  //   blue = 255- (parseInt(size / 10000) + 1 * 40)
+  //   red = mod;
+  //   green = mod;
+  // }
+  // console.log(red,green,blue);
+  temp = 0xFFFF00 - (0xf * parseInt(size / 10));
   result = '#' + temp.toString(16);
-
+  // result = `rgb(${red},${green},${blue})`;
   return result;
 }
 /* Name: buildMap  
