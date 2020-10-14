@@ -42,6 +42,7 @@ function init_data() {
             var init_year = parseInt(data[0]);
             console.log(init_year);
             cursor_wait();
+            waiting(init_year);
             buildMap(init_year);
             empNCbar(init_year);
             empNCtimeline(init_year);
@@ -77,6 +78,33 @@ function fill_in_popup(name, numb, pop, county_d) {
   pop_html = pop_html + pop_d + "%</h6>";
   return pop_html;
 }
+/* Name: waiting
+  Description: This populates the pop-up when the county is selected 
+  Input:
+    year - year
+
+  Returns:
+    pop_html - text string with html encoding for the pop-up
+*/
+function waiting(year) {
+  var data = '<h5> Map for year ' + year + ' is loading </h5>'
+  document.getElementById("wait").innerHTML = data;
+  return 
+}
+
+/* Name: map_comp
+  Description: This populates the pop-up when the county is selected 
+  Input:
+    year - year
+
+  Returns:
+    pop_html - text string with html encoding for the pop-up
+*/
+function map_comp(year) {
+  var data = 'Total Emplopyed by County Map in year ' + year
+  document.getElementById("wait").innerHTML = data;
+  return 
+}
 
 /* Name: optionChanged  
   Description: User has selected a year from the drop down.  Call the routines to populate the map
@@ -89,6 +117,7 @@ function fill_in_popup(name, numb, pop, county_d) {
 */
 function optionChanged(value) {
   cursor_wait();
+  waiting(value);
   buildMap(value);
   empNCbar(value);
   empNCtimeline(value);
@@ -374,6 +403,7 @@ function buildMap(year) {
         }
       }).addTo(myMap);
       cursor_clear();
+      map_comp(year);
     });
   });
 });
