@@ -258,76 +258,11 @@ function determine_size(county, county_d) {
 */
 function chooseColor(county, county_info) {
   var result;
+  var temp;
   size = determine_size(county, county_info);
-  var size1 = size / 1000;
-  switch (parseInt(size1)) {
-    case 0:     //below 1000
-      result = "#66ffff";
-      break;
-    case 1:     // 1000 to below 2000
-      result = "#66ffd9";
-      break;
-    case 2:     // 2000 to below 3000
-      result = "#80ffff";
-      break;
-    case 3:
-      result = "#66ffb3";
-      break;
-    case 4:
-      result = "#66ff8c";
-      break;
-    case 5:
-      result = "#66ff66";
-      break;
-    case 6:
-      result = "#8cff66";
-      break;
-    case 7:
-      result = "#b3ff66";
-      break;
-    case 8:
-      result = "#d9ff66";
-      break;
-    case 9:     // 9000 to below 10,000
-      result = "#ffff66";
-      break;
-    default:
-      size1 = size1 / 45;
-      switch (parseInt(size1)) {
-        case 0:   // 10,000 to below 45,000
-          result = "#ffd966";
-          break;
-        case 1:   // 45,000 to below 90,000
-          result = "#ffb366";
-          break;
-        case 2:   // 90,000 to below 135,000
-          result = "#ff8c66";
-          break;
-        case 3:
-          result = "#ff6666";
-          break;
-        case 4:
-          result = "#ff668c";
-          break;
-        case 5:
-          result = "#ff66b3";
-          break;
-        case 6:
-          result = "#ff66d9";
-          break;
-        case 7:
-          result = "#ff66ff";
-          break;
-        case 8:   // 360,000 to below 405,000
-          result = "#d966ff";
-          break;
-        case 9:   // 405,000 to below 450,000
-          result = "#b366ff";
-          break;
-        default:  // over 450,000
-          result = "#8c66ff"
-      }
-  }
+  temp = 0xFFFFFF - (0xf * parseInt(size / 10));
+  result = '#' + temp.toString(16);
+
   return result;
 }
 /* Name: buildMap  
